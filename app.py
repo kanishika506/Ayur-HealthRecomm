@@ -5,10 +5,20 @@ from flask import redirect
 from flask import url_for
 from db import get_db
 from werkzeug.security import check_password_hash, generate_password_hash
+from ai.face_analyzer import run_face_analysis
 
 app = Flask(__name__)
 
-@app.route("/", methods = ["GET", "POST"])
+@app.route("/")
+def index():
+    return render_template('index.html')
+
+@app.route("/analyzer")
+def analyzer():
+    run_face_analysis()
+    return  "camera close"
+
+@app.route("/login", methods = ["GET", "POST"])
 def login():
     message = ""
     if request.method == "POST":
