@@ -1,3 +1,6 @@
 Flask
 mysql-connector-python
 Werkzeug
+mediapipe
+opencv-python
+numpy
