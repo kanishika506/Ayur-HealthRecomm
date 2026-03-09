@@ -1,25 +1,167 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Ayur-HealthRecomm</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ayur-HealthRecomm</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            /* Divine Forest Background matching your reference */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                        url('https://i.pinimg.com/webp/1200x/36/19/09/36190987c6cd3c29ec4f1ac202decbf1.webp');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 420px;
+            padding: 60px 40px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: white;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        /* Container for the pill-shaped input with icon */
+        .input-box {
+            position: relative;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 15px 20px 15px 60px; /* Space for the icon on the left */
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50px; /* Pill shape */
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* The Circle Icon inside the input */
+        .icon-circle {
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        /* Login Button */
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: #008B8B; /* Your brand Turquoise */
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #008B8B;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .reg-link {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .reg-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 1px solid white;
+        }
+    </style>
 </head>
 <body>
 
-    <h2>Login<h2>
+    <div class="login-card">
+        <h2>User Login</h2>
 
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
+        {% if message %}
+            <p class="error-msg">{{ message }}</p>
+        {% endif %}
 
-    <form method = "POST">
-        <input type = "text" name = "username" placeholder = "Username" required>
-        <br>
-        <input type = "password" name = "password" placeholder = "Password" required>
-        <br>
-        <button type = "submit">Login</button>
-    </form>
+        <form method="POST">
+            <div class="input-box">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
 
-    <p>Don't have an account? <a href="/register">Register</a></p>
+            <div class="input-box">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <p class="reg-link">Don't have an account? <a href="/register">Register</a></p>
+    </div>
 
 </body>
 </html>
-
