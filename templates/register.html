@@ -1,28 +1,176 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Register for Ayur-HealthRecomm</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Ayur-HealthRecomm</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            /* Divine Forest Background matching your previous pages */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
+                        url('https://i.pinimg.com/webp/1200x/36/19/09/36190987c6cd3c29ec4f1ac202decbf1.webp');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            width: 100%;
+            max-width: 420px;
+            padding: 50px 40px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            color: white;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 35px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 15px 20px 15px 60px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50px; /* Pill shape */
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-box input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .icon-circle {
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: #008B8B; /* Branding Turquoise */
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .register-btn:hover {
+            background: #008B8B;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .login-link {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .login-link a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .login-link a:hover {
+            border-bottom: 1px solid white;
+        }
+    </style>
 </head>
 <body>
 
-    <h2>Create Account</h2>
+    <div class="register-card">
+        <h2>Create Account</h2>
 
-    <form method = "POST">
+        {% if message %}
+            <p class="error-msg">{{ message }}</p>
+        {% endif %}
 
-        <input type = "text" name = "username" placeholder = "Username" required>
-        <br>
-        <input type = "password" name = "password" placeholder = "Password" required>
-        <br>
-        <input type = "password" name = "confirm_password" placeholder = "Confirm Password" required>
-        <br>
-        <button type = "submit">Register</button>
+        <form method="POST">
+            <div class="input-box">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
 
-    </form>
+            <div class="input-box">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
 
-    <p style="color:red;">{{ message }}</p>
+            <div class="input-box">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-shield-check"></i>
+                </div>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
 
-    <p>Already have an account? <a href="/">Login</a></p>
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="/">Login here</a></p>
+    </div>
 
 </body>
 </html>
-
-
