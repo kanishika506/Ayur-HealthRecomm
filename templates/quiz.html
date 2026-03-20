@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prakriti Quiz - VedaPath</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1448375232540-d6a27393c14a?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px;
+        }
+        .quiz-header { width: 100%; max-width: 1000px; text-align: center; color: white; margin-bottom: 30px; }
+        .progress-container { width: 100%; height: 10px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 20px 0; overflow: hidden; }
+        .progress-bar { width: 6.6%; height: 100%; background: #008B8B; transition: 0.5s; }
+        .quiz-card {
+            background: rgba(255, 252, 240, 0.98); width: 100%; max-width: 1100px;
+            border-radius: 40px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+        }
+        .question-title { font-size: 2rem; color: #5d4037; font-weight: 700; margin-bottom: 30px; display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .question-number { background: #d4af37; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .options-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .option-item { cursor: pointer; transition: 0.3s; border-radius: 20px; padding: 15px; border: 3px solid transparent; }
+        .option-item:hover { background: rgba(0, 139, 139, 0.05); transform: translateY(-5px); }
+        .option-item.selected { border-color: #008B8B; background: rgba(0, 139, 139, 0.1); }
+        .option-letter { background: #a67c00; color: white; width: 35px; height: 35px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 10px; }
+        .option-label { display: block; font-size: 1.1rem; color: #5d4037; font-weight: 600; min-height: 3em; }
+        .option-img { width: 100%; height: 280px; background: #f0f0f0; border-radius: 15px; object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .quiz-nav { margin-top: 40px; display: flex; justify-content: space-between; }
+        .nav-btn { padding: 12px 35px; border-radius: 50px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-prev { background: #eee; color: #666; }
+        .btn-next { background: #008B8B; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-header">
+        <h2>Prakriti Discovery</h2>
+        <div class="progress-container"><div class="progress-bar" id="bar"></div></div>
+        <p id="step-text">Step 1 of 15</p>
+    </div>
+
+    <div class="quiz-card" id="quiz-content">
+        <div class="question-title">
+            <div class="question-number" id="q-num">1</div>
+            <span id="q-title">Body Structure</span>
+        </div>
+        <div class="options-grid" id="options-container"></div>
+        <div class="quiz-nav">
+            <button class="nav-btn btn-prev" onclick="changeQuestion(-1)">Previous</button>
+            <button class="nav-btn btn-next" id="next-btn" onclick="changeQuestion(1)">Save & Next</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { 
+        title: "Body Structure", 
+        options: ["Narrow frame", "Medium frame", "Wide frame"], 
+        imgs: ["vata_bodystructure.jpg", "pitta_structure.jpg", "kapha_structure.jpg"] 
+    }, //
+    { 
+        title: "Weight", 
+        options: ["Thin. Hard to gain.", "Medium. Fluctuates with lifestyle", "Heavy. Gain weight easily"], 
+        imgs: ["weight_vata.jpg", "weight_pitta.jpg", "weight_kapha.jpg"] 
+    }, //
+    { 
+        title: "Skin", 
+        options: ["Always dry.", "Oily. Prone to pimples/redness.", "Thick and smooth."], 
+        imgs: ["skin_vata.jpg", "skin_pitta.jpg", "skin_kapha.jpg"] 
+    }, //
+    { 
+        title: "Sweat after Workout", 
+        options: ["Barely sweat.", "Drenched, strong odour.", "Moderate sweat, more in humidity."], 
+        imgs: ["sweat_vata.jpg", "sweat_pitta.jpg", "sweat_kapha.jpg"] 
+    }, //
+    { 
+        title: "Body temperature", 
+        options: ["Often cold, love the sun.", "Heat up fast, prefer winter.", "Comfy year round, prefer summer."], 
+        imgs: ["temp_vata.jpg", "temp_pitta.jpg", "temp_kapha.jpg"] 
+    }, //
+    { 
+        title: "Hair", 
+        options: ["Dry, rough, scanty.", "Thin, straight, greys early", "Thick, shiny, lush"], 
+        imgs: ["hair_vata.jpg", "hair_pitta.jpg", "hair_kapha.jpg"] 
+    }, //
+    { 
+        title: "Eyes", 
+        options: ["Small, dry", "Medium, sharp gaze.", "Big, thick lashes."], 
+        imgs: ["eyes_vata.jpg", "eyes_pitta.jpg", "eyes_kapha.jpg"] 
+    }, //
+    { 
+        title: "Hunger", 
+        options: ["Irregular appetite", "Strong, frequent hunger", "Calm hunger, can easily fast"], 
+        imgs: ["hunger_vata.jpg", "hunger_pitta.jpg", "hunger_kapha.jpg"] 
+    }, //
+    { 
+        title: "Digestion", 
+        options: ["Irregular, bloating, gas", "Fast digestion, hungry soon", "Slow digestion, feel heavy"], 
+        imgs: ["dig_vata.jpg", "dig_pitta.jpg", "dig_kapha.jpg"] 
+    }, //
+    { 
+        title: "Sleep", 
+        options: ["Light, disturbed sleep", "Light but prompt wake-up", "Deep sleep, hard to wake-up"], 
+        imgs: ["sleep_vata.jpg", "sleep_pitta.jpg", "sleep_kapha.jpg"] 
+    }, //
+    { 
+        title: "Focus Style", 
+        options: ["Scattered, easily distracted", "Sharp focus, but impatient", "Slow to start, but deeply focused"], 
+        imgs: ["focus_vata.jpg", "focus_pitta.jpg", "focus_kapha.jpg"] 
+    }, //
+    { 
+        title: "Work Style", 
+        options: ["Many projects, always juggling", "Perfectionist, loves to lead", "Seeks stable roles, dislikes change"], 
+        imgs: ["work_vata.jpg", "work_pitta.jpg", "work_kapha.jpg"] 
+    }, //
+    { 
+        title: "Group Conversation", 
+        options: ["Fast, free-flowing talk", "Clear, assertive points", "Quiet, thoughtful contributions"], 
+        imgs: ["conv_vata.jpg", "conv_pitta.jpg", "conv_kapha.jpg"] 
+    }, //
+    { 
+        title: "Frequent Emotion", 
+        options: ["Anxiety, fear", "Anger, impatience", "Sadness, low energy"], 
+        imgs: ["emo_vata.jpg", "emo_pitta.jpg", "emo_kapha.jpg"] 
+    }, //
+    { 
+        title: "Learning Style", 
+        options: ["Quick to learn, quick to forget", "Learns fast, remembers when useful", "Slow learner, but never forgets"],
+        imgs: ["learn_vata.jpg", "learn_pitta.jpg", "learn_kapha.jpg"]
+    } //
+];
+
+        let currentQ = 0;
+        let answers = new Array(15).fill(null);
+
+        function renderQuestion() {
+            const data = quizData[currentQ];
+            document.getElementById('q-num').innerText = currentQ + 1;
+            document.getElementById('q-title').innerText = data.title;
+            document.getElementById('step-text').innerText = `Step ${currentQ + 1} of 15`;
+            document.getElementById('bar').style.width = ((currentQ + 1) / 15 * 100) + '%';
+            document.getElementById('next-btn').innerText = (currentQ === 14) ? "Finish Quiz" : "Save & Next";
+
+            let html = '';
+            const letters = ['A', 'B', 'C'];
+            data.options.forEach((opt, i) => {
+                const isSelected = answers[currentQ] === i ? 'selected' : '';
+                html += `
+                    <div class="option-item ${isSelected}" onclick="selectOption(${i})">
+                        <div class="option-letter">${letters[i]}</div>
+                        <span class="option-label">${opt}</span>
+                        <div class="option-img" style="background: url('https://via.placeholder.com/300x500?text=Option+${letters[i]}') center/cover"></div>
+                    </div>`;
+            });
+            document.getElementById('options-container').innerHTML = html;
+        }
+
+        function selectOption(index) {
+            answers[currentQ] = index;
+            renderQuestion();
+        }
+
+        function changeQuestion(dir) {
+            if (dir === 1 && answers[currentQ] === null) {
+                alert("Please select an option before moving forward.");
+                return;
+            }
+            if (currentQ === 14 && dir === 1) { calculateResult(); return; }
+            if (currentQ + dir >= 0 && currentQ + dir < 15) {
+                currentQ += dir;
+                renderQuestion();
+            }
+        }
+
+        function calculateResult() {
+            const counts = [0, 0, 0]; // 0: Vata, 1: Pitta, 2: Kapha
+            answers.forEach(val => counts[val]++);
+            const max = Math.max(...counts);
+            const result = counts[0] === max ? "Vata" : counts[1] === max ? "Pitta" : "Kapha";
+            
+            document.getElementById('quiz-content').innerHTML = `
+                <h2 style="color:#008B8B; font-size: 2.5rem;">Your Result: ${result}</h2>
+                <p style="margin: 20px 0; color: #5d4037;">Based on your physical and mental traits, your dominant Prakriti is <strong>${result}</strong>.</p>
+                <button class="nav-btn btn-next" onclick="location.reload()">Retake Quiz</button>
+            `;
+        }
+        renderQuestion();
+    </script>
+</body>
+</html>
